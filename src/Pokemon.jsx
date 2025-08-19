@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import "./index.css";
 import { PokemonCard } from "./PokemonCard";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
+
 
 export const Pokemon = () => {
   const [pokemon, setPokemon] = useState([]);
@@ -12,7 +15,7 @@ export const Pokemon = () => {
 
   // Pagination state
   const [page, setPage] = useState(1);
-  const limit = 20; // 20 Pokémon per page
+  const limit = 20; 
   const offset = (page - 1) * limit;
 
   const API = `https://pokeapi.co/api/v2/pokemon?limit=${limit}&offset=${offset}`;
@@ -68,19 +71,16 @@ export const Pokemon = () => {
     }
   };
 
-  // Fetch whenever page changes (and only for "all" type)
   useEffect(() => {
     if (selectedType === "all") {
       fetchPokemon(API);
     }
   }, [page]);
 
-  // 🔎 Apply search
   let filteredPokemon = pokemon.filter((curPokemon) =>
     curPokemon.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // 🔄 Apply sort
   filteredPokemon = [...filteredPokemon].sort((a, b) => {
     switch (sortOption) {
       case "id-asc":
@@ -97,8 +97,26 @@ export const Pokemon = () => {
   });
 
   if (loading) {
-    return <h1>Loading Pokémon...</h1>;
-  }
+  return (
+    <section className="container">
+      <header>
+        <h1>Pokémon Explorer</h1>
+      </header>
+            <ul className="cards">
+        {Array(20) 
+          .fill(0)
+          .map((_, index) => (
+            <li key={index} className="card">
+              <Skeleton height={100} width={100} circle /> 
+              <Skeleton height={20} width={`80%`} /> 
+              <Skeleton height={15} width={`60%`} />
+            </li>
+          ))}
+      </ul>
+    </section>
+  );
+}
+
 
   if (error) {
     return <h1>Something went wrong. Please try again.</h1>;
@@ -110,7 +128,6 @@ export const Pokemon = () => {
         <h1>Pokémon Explorer</h1>
       </header>
 
-      {/* Search */}
       <div className="pokemon-search">
         <input
           type="text"
@@ -120,7 +137,6 @@ export const Pokemon = () => {
         />
       </div>
 
-      {/* Type Filter */}
       <div className="pokemon-filter">
         <label htmlFor="type">Filter by Type: </label>
         <select
@@ -129,7 +145,7 @@ export const Pokemon = () => {
           onChange={(e) => {
             const type = e.target.value;
             setSelectedType(type);
-            setPage(1); // reset to page 1 on type change
+            setPage(1); 
             fetchByType(type);
           }}
         >
@@ -153,7 +169,6 @@ export const Pokemon = () => {
         </select>
       </div>
 
-      {/* Sort */}
       <div className="pokemon-sort">
         <label htmlFor="sort">Sort By: </label>
         <select
@@ -168,14 +183,12 @@ export const Pokemon = () => {
         </select>
       </div>
 
-      {/* Cards */}
       <ul className="cards">
         {filteredPokemon.map((curPokemon) => (
           <PokemonCard key={curPokemon.id} pokemonData={curPokemon} />
         ))}
       </ul>
 
-      {/* Pagination controls */}
       {selectedType === "all" && (
         <div className="pagination">
           <button
