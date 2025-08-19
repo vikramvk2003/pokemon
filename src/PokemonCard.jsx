@@ -5,7 +5,7 @@ export const PokemonCard =({pokemonData})=>{
     return(
         <li className="pokemon-card">
             
-           <Link to={`/pokemon/${id}`} className="pokemon-link">
+           <Link to={`/pokemon/${name}`} className="pokemon-link">
             <figure>
                 <img src={pokemonData.sprites.other.dream_world.front_default} alt={name} className="pokemon-image"/>
                 {/* <h2>{name}</h2> */}

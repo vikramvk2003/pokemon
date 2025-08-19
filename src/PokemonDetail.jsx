@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 export const PokemonDetail = () => {
-  const { id } = useParams();
+  const { name } = useParams();
   const [pokemon, setPokemon] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -10,7 +10,7 @@ export const PokemonDetail = () => {
   useEffect(() => {
     const fetchPokemonDetail = async () => {
       try {
-        const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
+        const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
         const data = await res.json();
         setPokemon(data);
         setLoading(false);
@@ -20,7 +20,7 @@ export const PokemonDetail = () => {
       }
     };
     fetchPokemonDetail();
-  }, [id]);
+  }, [name]);
 
   if (loading) return <h2>Loading...</h2>;
   if (error) return <h2>Something went wrong...</h2>;

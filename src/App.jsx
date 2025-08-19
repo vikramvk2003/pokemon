@@ -7,7 +7,7 @@ export const App = () => {
     <Router>
       <Routes>
         <Route path="/" element={<Pokemon />} />
-        <Route path="/pokemon/:id" element={<PokemonDetail />} />
+        <Route path="/pokemon/:name" element={<PokemonDetail />} />
       </Routes>
     </Router>
   );
